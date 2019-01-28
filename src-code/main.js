@@ -24,9 +24,10 @@ let enemiesP2 = []
 let enemyGenerator = ['generateEnemy', 'generateBisketo']
 let images = {
   bisketo: "../images/bisketo.png",
-  farahWalk1: "../images/farah-standing.png",
+  farahWalk1: "../images/farah-choose.png",
   tomasaChoose: "../images/tomasa-choose.png",
-  planet1Bg:"../images/background-planet1-pixilart.png",
+  planet1Bg:"../images/planet1Bg.png",
+  alien: "../images/alien.png",
 }
 let sounds = {
 
@@ -38,7 +39,7 @@ class Farah {
   constructor () {
     this.name = name
     this.x = 270
-    this.y = 210
+    this.y = 230
     this.width = 100
     this.height = 100
     this.image = new Image()
@@ -48,6 +49,12 @@ class Farah {
 
   draw () {
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+  }
+
+  jump() {
+    // if (this.y < canvasP1.height - this.height ) {
+      // this.y += 5;
+    // }
   }
 }
 
@@ -69,10 +76,27 @@ class Planet1 {
     // this.x--
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
     // ctxP1.drawImage(this.image, this.x + this.width, this.y, this.width, this.height)
-    ctxP1.fillStyle = "darkred"
+    ctxP1.fillStyle = "skyblue"
     ctxP1.fillRect(0,300,600,100)
   }
 }
+
+// class Alien {
+//   constructor () {
+//     this.x = 40
+//     this.y = 230
+//     this.width = 80
+//     this.height = 80
+//     this.image = new Image()
+//     this.image.src = images.alien
+//     this.image.onload = image.draw()
+//   }
+
+//   draw() {
+//     // x++
+//     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+//   }
+// }
 
 
 
@@ -87,6 +111,7 @@ class Planet1 {
     frames++
     planet1.draw()
     player1.draw()
+    // enemy.draw()
   }
 
   function gameOver () {
@@ -102,9 +127,23 @@ class Planet1 {
 
 let planet1 = new Planet1()
 let player1 = new Farah()
+// let enemy = new Alien()
 
 // LISTENERS
 
+// addEventListener('keydown', e => {
+//   if (e.keyCode === "87") {
+//     clearInterval(interval);
+//     console.log(e)
+//     // player1.jump()
+//   }
+//  })
+
+// addEventListener('keypress', e => {
+//   if (e.keyCode === 65) {
+//     clearInterval(interval);
+//   }
+// })
 
 // ACTIONS 
 
