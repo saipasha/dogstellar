@@ -52,9 +52,7 @@ class Farah {
   }
 
   jump() {
-    // if (this.y < canvasP1.height - this.height ) {
-      // this.y += 5;
-    // }
+      this.y -= 100;
   }
 }
 
@@ -103,10 +101,12 @@ class Planet1 {
 //MAIN FUNCTIONS
 
   function startGame () {
+    console.log("hi")
     setInterval(update, 1000/60)
   }
 
   function update () {
+    console.log("hiii")
     ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
     frames++
     planet1.draw()
@@ -131,13 +131,14 @@ let player1 = new Farah()
 
 // LISTENERS
 
-// addEventListener('keydown', e => {
-//   if (e.keyCode === "87") {
-//     clearInterval(interval);
-//     console.log(e)
-//     // player1.jump()
-//   }
-//  })
+
+addEventListener('keydown', (e) => {
+  if (e.keyCode == "87") {
+    clearInterval(interval);
+    console.log(e)
+    player1.jump()
+  }
+})
 
 // addEventListener('keypress', e => {
 //   if (e.keyCode === 65) {
