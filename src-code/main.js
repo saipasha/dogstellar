@@ -34,7 +34,7 @@ let images = {
 let sounds = {
 
 }
-let gravity = .98
+let gravityMann = .28
 let friction = .8
 let keys = {}
 
@@ -54,7 +54,7 @@ class Farah {
     this.velY = 0
     this.grounded = false
     this.jumping = false
-    this.jumpStrength = 20
+    this.jumpStrength = 2
     //horizontal
     this.velX = 0
   }
@@ -94,11 +94,11 @@ class Floor {
     this.image = new Image()
     this.image.src = images.mannFloor
     this.image.onload = this.draw()
-
+  }
+  
     draw() {
       ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
     }
-  }
 }
 
 // class Alien {
@@ -144,6 +144,8 @@ class Floor {
 // AUX FUNCTIONS
 
 function drawTime(){
+  ctxP1.fillStyle = "white"
+  ctxP1.fillRect(512,16,60,20)
   ctxP1.font = 'Avenir 50px'
   ctxP1.fillStyle = "black"
   let time = "T-" + (180 - Math.floor(frames/60)) + " sec"
@@ -153,7 +155,7 @@ function drawTime(){
 function move () {
   if(!player1.grounded){
     player1.y += player1.velY
-    player1.velY += gravity
+    player1.velY += gravityMann
   }
   if(player1.y>floor.y){
     player1.grounded = true
@@ -166,6 +168,7 @@ function move () {
 
   if(keys[68]){
     player1.velX++
+    
   }
   if(keys[65]){
     player1.velX--
@@ -175,7 +178,8 @@ function move () {
       player1.velY = 0
       player1.grounded = false
       player1.jumping = true
-      player1.velY += -player1.jumpStrength*5
+      player1.velY += -player1.jumpStrength*2
+      
     } 
   }
 }
@@ -186,7 +190,7 @@ function move () {
 let planet1 = new Planet1()
 let player1 = new Farah()
 // let enemy = new Alien()
-// let floor = new Floor()
+let floor = new Floor()
 
 // LISTENERS
 
