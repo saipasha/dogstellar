@@ -12,7 +12,7 @@ ctxP2.fillRect(0,0,600,400)
 
 // ON LOAD
 
-
+ctxP1.font = 'Avenir 50px'
 
 // VARIABLES
 let interval
@@ -28,10 +28,15 @@ let images = {
   tomasaChoose: "../images/tomasa-choose.png",
   planet1Bg:"../images/planet1Bg.png",
   alien: "../images/alien.png",
+  mannPlanet: "../images/mann-planet-pixel.png",
+  mannFloor: "../images/manns-floor-pixel.gif",
 }
 let sounds = {
 
 }
+let gravity = .98
+let friction = .8
+let keys = {}
 
 // CLASSES
 
@@ -45,14 +50,17 @@ class Farah {
     this.image = new Image()
     this.image.src = images.farahWalk1
     this.image.onload = this.draw()
+    // vertical physics
+    this.velY = 0
+    this.grounded = false
+    this.jumping = false
+    this.jumpStrength = 20
+    //horizontal
+    this.velX = 0
   }
 
   draw () {
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
-  }
-
-  jump() {
-      this.y -= 100;
   }
 }
 
@@ -63,7 +71,7 @@ class Planet1 {
     this.width = canvasP1.width
     this.height = canvasP1.height
     this.image = new Image()
-    this.image.src = images.planet1Bg
+    this.image.src = images.mannPlanet
     this.image.onload = this.draw()
   }
 
@@ -74,8 +82,22 @@ class Planet1 {
     // this.x--
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
     // ctxP1.drawImage(this.image, this.x + this.width, this.y, this.width, this.height)
-    ctxP1.fillStyle = "skyblue"
-    ctxP1.fillRect(0,300,600,100)
+  }
+}
+
+class Floor {
+  constructor () {
+    this.x = 0
+    this.y = 350
+    this.width = canvasP1.width
+    this.height = 50
+    this.image = new Image()
+    this.image.src = images.mannFloor
+    this.image.onload = this.draw()
+
+    draw() {
+      ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+    }
   }
 }
 
@@ -101,17 +123,17 @@ class Planet1 {
 //MAIN FUNCTIONS
 
   function startGame () {
-    console.log("hi")
     setInterval(update, 1000/60)
   }
 
   function update () {
-    console.log("hiii")
     ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
     frames++
     planet1.draw()
     player1.draw()
     // enemy.draw()
+    drawTime()
+    move()
   }
 
   function gameOver () {
@@ -121,6 +143,42 @@ class Planet1 {
 
 // AUX FUNCTIONS
 
+function drawTime(){
+  ctxP1.font = 'Avenir 50px'
+  ctxP1.fillStyle = "black"
+  let time = "T-" + (180 - Math.floor(frames/60)) + " sec"
+  ctxP1.fillText(time,520,30)
+}
+
+function move () {
+  if(!player1.grounded){
+    player1.y += player1.velY
+    player1.velY += gravity
+  }
+  if(player1.y>floor.y){
+    player1.grounded = true
+    player1.jumping = false
+    player1.y = floor.y - player1.height
+  }
+  player1.x += player1.velX
+  player1.velX *= friction
+  //horizontal
+
+  if(keys[68]){
+    player1.velX++
+  }
+  if(keys[65]){
+    player1.velX--
+  }
+  if(keys[87]){
+    if(!player1.jumping){
+      player1.velY = 0
+      player1.grounded = false
+      player1.jumping = true
+      player1.velY += -player1.jumpStrength*5
+    } 
+  }
+}
 
 
 // INSTANCES 
@@ -128,16 +186,22 @@ class Planet1 {
 let planet1 = new Planet1()
 let player1 = new Farah()
 // let enemy = new Alien()
+// let floor = new Floor()
 
 // LISTENERS
 
 
-addEventListener('keydown', (e) => {
-  if (e.keyCode == "87") {
-    clearInterval(interval);
-    console.log(e)
-    player1.jump()
+addEventListener('keydown', e=>{
+  if(e.keyCode === 87){
+    player1.y = 0
+    player1.grounded = false
+    player1.velY = 0
   }
+  keys[e.keyCode] = true
+})
+
+addEventListener('keyup', e=>{
+  keys[e.keyCode] = false
 })
 
 // addEventListener('keypress', e => {
