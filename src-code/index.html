@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="styles.css">
+  <title>Document</title>
+</head>
+<body>
+  <section id="container">
+    <article id="logo">
+      <img src="../images/dogstellar-1.png"/>
+    </article>
+    <article id="twoCanvas">
+      <canvas id="player1" width="584" height="352"></canvas>
+      <canvas id="player2" width="584" height="352"></canvas>
+    </article>
+    <article id="main">
+      <div id="story"></div>
+      <div id="canvas"></div>
+      <div id="instructions">
+        <div id="keys-left">
+            <p class="w key">W</p>
+            <p class="a key">A</p>
+            <p class="s key">S</p>
+            <p class="d key">D</p>
+            <p class="player">PLAYER 1</p>
+        </div>
+
+        <div id="game-instructions">
+          <p>Decide which planets to visit and return to your space station with as much
+            'bisketos' 
+            <!-- <img src="../images/bisketo.png"/> -->
+            as possible.</p>
+          <p>Your choices on which planet to visit will affect the time you have left to
+            return to your ship and the atmosfere conditions determine the ammount of bisketos.
+            Replenish your oxygen by going back to your ship outside the planet's atmosphere
+            and return before the time's up. </p>
+        </div>
+
+        <div id="keys-right">
+            <p class="key">&#9650</p>
+            <p class="key">&#9664</p>
+            <p class="key">&#9660</p>
+            <p class="key">&#9654</p>
+            <p class="player">PLAYER 2</p>
+        </div>
+      </div>
+    </article>
+    <article>
+      <div id="score"></div>
+      <div id="reset"></div>
+    </article>
+  </section>
+
+  <script src="main.js"></script>
+</body>
+</html>
