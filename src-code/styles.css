@@ -83,6 +83,13 @@ p {
   margin-top: 5px;
 }
 
+.player-time {
+  color: white;
+  font-family: Avenir;
+  font-size: 15px;
+  margin: 5px auto auto 80px;
+}
+
 #game-instructions {
   width: 1200px;
   display: flex;
@@ -92,7 +99,7 @@ p {
   flex-wrap: wrap;
   color: whitesmoke;
   font-family: Avenir;
-  margin: 50px;
+  margin: auto 50px auto 50px;
 }
 
 #game-instructions img {
@@ -104,6 +111,7 @@ p {
   font-size: 15px;
   font-weight: 400;
 }
+
 
 
 /* .bottom-key {

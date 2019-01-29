@@ -142,11 +142,11 @@ class FloorP2 {
         this.x = 0
       } 
       
-      if (keys[65]) {
+      if (keys[39]) {
         this.x++
         
       }
-      if (keys[68]) {
+      if (keys[37]) {
         this.x--
       }
   
@@ -245,18 +245,19 @@ class Tomasa {
 
   function update () {
     ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+    ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
     frames++
     planet1.draw()
     floorP1.draw()
     planet2.draw()
     floorP2.draw()
     player1.draw()
-    // enemy.draw()
-    drawTime()
     moveP1()
-    // bisketo.draw()
     player2.draw()
     moveP2()
+    drawTimeP1()
+    // enemy.draw()
+    // bisketo.draw()
   }
 
   function gameOver () {
@@ -269,14 +270,10 @@ class Tomasa {
 
 // AUX FUNCTIONS
 
-function drawTime(){
-  ctxP1.fillStyle = "white"
-  ctxP1.fillRect(512,16,60,20)
-  ctxP1.font = 'Avenir 50px'
-  ctxP1.fillStyle = "black"
+function drawTimeP1(){
   let time = (180 - Math.floor(frames/60))
   let timePrint = "T-" + time + " sec"
-  ctxP1.fillText(timePrint,520,30)
+  document.getElementById('timeP1').textContent(timePrint)
 }
 
 
@@ -381,6 +378,18 @@ addEventListener('keydown', e => {
   if (e.keyCode === 83) {
     document.getElementById('s-key').classList.add('key-press')
   }
+  if (e.keyCode === 38) {
+    document.getElementById('up-key').classList.add('key-press')
+  }
+  if (e.keyCode === 37) {
+    document.getElementById('left-key').classList.add('key-press')
+  }
+  if (e.keyCode === 40) {
+    document.getElementById('down-key').classList.add('key-press')
+  }
+  if (e.keyCode === 39) {
+    document.getElementById('right-key').classList.add('key-press')
+  }
 })
 
 addEventListener('keyup', e => {
@@ -395,6 +404,18 @@ addEventListener('keyup', e => {
   }
   if (e.keyCode === 83) {
     document.getElementById('s-key').classList.remove('key-press')
+  }
+  if (e.keyCode === 38) {
+    document.getElementById('up-key').classList.remove('key-press')
+  }
+  if (e.keyCode === 37) {
+    document.getElementById('left-key').classList.remove('key-press')
+  }
+  if (e.keyCode === 40) {
+    document.getElementById('down-key').classList.remove('key-press')
+  }
+  if (e.keyCode === 39) {
+    document.getElementById('right-key').classList.remove('key-press')
   }
 })
 
