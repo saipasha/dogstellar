@@ -50,7 +50,6 @@ let enemiesP2 = []
 
 class Farah {
   constructor () {
-    this.name = name
     this.x = 270
     this.y = 220
     this.width = 100
@@ -106,22 +105,45 @@ class Planet1 {
   }
 }
 
-class Bisketo {
+class Tomasa {
   constructor () {
-    this.x = 0
-    this.y = Math.floor(Math.random()*100) + 100
+    this.x = 180
+    this.y = 220
     this.width = 100
-    this.height = 40
+    this.height = 110
     this.image = new Image()
-    this.image.src = "../images/bisketo.png"
-    this.image.onload = draw()
+    this.image.src = images.tomasaChoose
+    this.image.onload = this.draw()
+    // vertical physics
+    this.velY = 2
+    this.grounded = true
+    this.jumping = false
+    this.jumpStrength = 2
+    //horizontal
+    this.velX = 0
   }
 
   draw() {
-    this.x++
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
   }
 }
+
+// class Bisketo {
+//   constructor () {
+//     this.x = 0
+//     this.y = Math.floor(Math.random()*100) + 100
+//     this.width = 100
+//     this.height = 40
+//     this.image = new Image()
+//     this.image.src = "../images/bisketo.png"
+//     this.image.onload = draw()
+//   }
+
+//   draw() {
+//     this.x++
+//     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+//   }
+// }
 
 class Floor {
   constructor () {
@@ -139,22 +161,22 @@ class Floor {
     }
 }
 
-class Alien {
-  constructor () {
-    this.x = 40
-    this.y = 230
-    this.width = 80
-    this.height = 80
-    this.image = new Image()
-    this.image.src = images.alien
-    this.image.onload = image.draw()
-  }
+// class Alien {
+//   constructor () {
+//     this.x = 40
+//     this.y = 230
+//     this.width = 80
+//     this.height = 80
+//     this.image = new Image()
+//     this.image.src = images.bisketo
+//     this.image.onload = image.draw()
+//   }
 
-  draw() {
-    x++
-    ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
-  }
-}
+//   draw() {
+//     x++
+//     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+//   }
+// }
 
 
 
@@ -172,8 +194,9 @@ class Alien {
     floor.draw()
     // enemy.draw()
     drawTime()
-    move()
+    moveP1()
     // bisketo.draw()
+    player2.draw()
   }
 
   function gameOver () {
@@ -213,7 +236,6 @@ function moveP1 () {
 
   if(keys[68]){
     player1.velX++
-    // player2.velX++
   }
   if(keys[65]){
     player1.velX--
@@ -229,37 +251,37 @@ function moveP1 () {
   }
 }
 
-function moveP2 () {
-  if(!player2.grounded){
-    player2.y += player2.velY
-    player2.velY += gravityMann
-  }
-  if(player2.y>floor.y){
-    player2.grounded = true
-    player2.jumping = false
-    player2.y = floor.y - player2.height+20
-  }
-  player2.x += player2.velX
-  player2.velX *= friction
-  //horizontal
+// function moveP2 () {
+//   if(!player2.grounded){
+//     player2.y += player2.velY
+//     player2.velY += gravityMann
+//   }
+//   if(player2.y>floor.y){
+//     player2.grounded = true
+//     player2.jumping = false
+//     player2.y = floor.y - player2.height+20
+//   }
+//   player2.x += player2.velX
+//   player2.velX *= friction
+//   //horizontal
 
-  if(keys[68]){
-    player2.velX++
-    // player2.velX++
-  }
-  if(keys[65]){
-    player2.velX--
-  }
-  if(keys[87]){
-    if(!player2.jumping){
-      player2.velY = 0
-      player2.grounded = false
-      player2.jumping = true
-      player2.velY += -player2.jumpStrength
+//   if(keys[68]){
+//     player2.velX++
+//     // player2.velX++
+//   }
+//   if(keys[65]){
+//     player2.velX--
+//   }
+//   if(keys[87]){
+//     if(!player2.jumping){
+//       player2.velY = 0
+//       player2.grounded = false
+//       player2.jumping = true
+//       player2.velY += -player2.jumpStrength
       
-    } 
-  }
-}
+//     } 
+//   }
+// }
 
 
 // INSTANCES 
@@ -269,6 +291,7 @@ let player1 = new Farah()
 // let enemy = new Alien()
 let floor = new Floor()
 // let bisketo = new Bisketo()
+let player2 = new Tomasa()
 
 
 // LISTENERS
