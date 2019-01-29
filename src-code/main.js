@@ -12,15 +12,11 @@ ctxP2.fillRect(0,0,600,400)
 
 // ON LOAD
 
-ctxP1.font = 'Avenir 50px'
+// window.onload(ctxP1.font = 'Avenir 50px')
 
-// VARIABLES
+// VARIABLES GRAL
 let interval
 let frames = 0
-let p1 = ""
-let p2 = ""
-let enemiesP1 = []
-let enemiesP2 = []
 let enemyGenerator = ['generateEnemy', 'generateBisketo']
 let images = {
   bisketo: "../images/bisketo.png",
@@ -30,6 +26,7 @@ let images = {
   alien: "../images/alien.png",
   mannPlanet: "../images/mann-planet-pixel.png",
   mannFloor: "../images/manns-floor-pixel.gif",
+  mannPlanetFlip: "../images/mann-planet-pixel-flip.png"
 }
 let sounds = {
 
@@ -38,23 +35,34 @@ let gravityMann = .28
 let friction = .8
 let keys = {}
 
+
+// VARIABLES P1
+let p1 = ""
+let enemiesP1 = []
+
+
+// VARIABLES P2
+let p2 = ""
+let enemiesP2 = []
+
+
 // CLASSES
 
 class Farah {
   constructor () {
     this.name = name
     this.x = 270
-    this.y = 230
+    this.y = 220
     this.width = 100
     this.height = 100
     this.image = new Image()
     this.image.src = images.farahWalk1
     this.image.onload = this.draw()
     // vertical physics
-    this.velY = 0
-    this.grounded = false
+    this.velY = 2
+    this.grounded = true
     this.jumping = false
-    this.jumpStrength = 2
+    this.jumpStrength = 1.2
     //horizontal
     this.velX = 0
   }
@@ -72,23 +80,39 @@ class Planet1 {
     this.height = canvasP1.height
     this.image = new Image()
     this.image.src = images.mannPlanet
+    // this.image.onload = this.draw()
+    this.image2 = new Image()
+    this.image2.src = images.mannPlanetFlip
     this.image.onload = this.draw()
   }
 
   draw () {
-    // if (this.x < -canvasP1.width) {
-    //   this.x = 0
-    // }
-    // this.x--
-    ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
-    // ctxP1.drawImage(this.image, this.x + this.width, this.y, this.width, this.height)
+
+//RETURN HERE. MOVING BACKGROUND STILL DOESN'T WORK.
+
+    ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)    
+    if (this.x < -canvasP1.width) {
+      this.x = 0
+    } 
+    
+    if (keys[65]) {
+      this.x++
+      ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+      ctxP1.drawImage(this.image2, this.x - this.width, this.y, this.width, this.height)
+    }
+    if (keys[68]) {
+      this.x--
+      ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+      ctxP1.drawImage(this.image2, this.x + this.width*2, this.y, this.width, this.height)
+    }
+
   }
 }
 
 class Floor {
   constructor () {
     this.x = 0
-    this.y = 350
+    this.y = 302
     this.width = canvasP1.width
     this.height = 50
     this.image = new Image()
@@ -131,6 +155,7 @@ class Floor {
     frames++
     planet1.draw()
     player1.draw()
+    floor.draw()
     // enemy.draw()
     drawTime()
     move()
@@ -148,8 +173,9 @@ function drawTime(){
   ctxP1.fillRect(512,16,60,20)
   ctxP1.font = 'Avenir 50px'
   ctxP1.fillStyle = "black"
-  let time = "T-" + (180 - Math.floor(frames/60)) + " sec"
-  ctxP1.fillText(time,520,30)
+  let time = (180 - Math.floor(frames/60))
+  let timePrint = "T-" + time + " sec"
+  ctxP1.fillText(timePrint,520,30)
 }
 
 function move () {
@@ -168,7 +194,7 @@ function move () {
 
   if(keys[68]){
     player1.velX++
-    
+    // player2.velX++
   }
   if(keys[65]){
     player1.velX--
@@ -200,12 +226,19 @@ addEventListener('keydown', e=>{
     player1.y = 0
     player1.grounded = false
     player1.velY = 0
+    document.getElementById('w-key').classList.toggle('key-press')
+  }
+  if(e.keyCode === 68) {
+    document.getElementById("d-key").classList.toggle("key-press")
   }
   keys[e.keyCode] = true
 })
 
+
+
 addEventListener('keyup', e=>{
   keys[e.keyCode] = false
+  document.getElementById('w-key').classList.toggle('key-press')
 })
 
 // addEventListener('keypress', e => {
