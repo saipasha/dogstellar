@@ -197,7 +197,7 @@ function drawTime(){
 }
 
 
-function move () {
+function moveP1 () {
   if(!player1.grounded){
     player1.y += player1.velY
     player1.velY += gravityMann
@@ -229,6 +229,38 @@ function move () {
   }
 }
 
+function moveP2 () {
+  if(!player2.grounded){
+    player2.y += player2.velY
+    player2.velY += gravityMann
+  }
+  if(player2.y>floor.y){
+    player2.grounded = true
+    player2.jumping = false
+    player2.y = floor.y - player2.height+20
+  }
+  player2.x += player2.velX
+  player2.velX *= friction
+  //horizontal
+
+  if(keys[68]){
+    player2.velX++
+    // player2.velX++
+  }
+  if(keys[65]){
+    player2.velX--
+  }
+  if(keys[87]){
+    if(!player2.jumping){
+      player2.velY = 0
+      player2.grounded = false
+      player2.jumping = true
+      player2.velY += -player2.jumpStrength
+      
+    } 
+  }
+}
+
 
 // INSTANCES 
 
@@ -237,6 +269,7 @@ let player1 = new Farah()
 // let enemy = new Alien()
 let floor = new Floor()
 // let bisketo = new Bisketo()
+
 
 // LISTENERS
 
