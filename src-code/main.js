@@ -62,7 +62,7 @@ class Farah {
     this.velY = 2
     this.grounded = true
     this.jumping = false
-    this.jumpStrength = 1.2
+    this.jumpStrength = 2
     //horizontal
     this.velX = 0
   }
@@ -106,6 +106,23 @@ class Planet1 {
   }
 }
 
+class Bisketo {
+  constructor () {
+    this.x = 0
+    this.y = Math.floor(Math.random()*100) + 100
+    this.width = 100
+    this.height = 40
+    this.image = new Image()
+    this.image.src = "../images/bisketo.png"
+    this.image.onload = draw()
+  }
+
+  draw() {
+    this.x++
+    ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+  }
+}
+
 class Floor {
   constructor () {
     this.x = 0
@@ -122,22 +139,22 @@ class Floor {
     }
 }
 
-// class Alien {
-//   constructor () {
-//     this.x = 40
-//     this.y = 230
-//     this.width = 80
-//     this.height = 80
-//     this.image = new Image()
-//     this.image.src = images.alien
-//     this.image.onload = image.draw()
-//   }
+class Alien {
+  constructor () {
+    this.x = 40
+    this.y = 230
+    this.width = 80
+    this.height = 80
+    this.image = new Image()
+    this.image.src = images.alien
+    this.image.onload = image.draw()
+  }
 
-//   draw() {
-//     // x++
-//     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
-//   }
-// }
+  draw() {
+    x++
+    ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+  }
+}
 
 
 
@@ -156,10 +173,14 @@ class Floor {
     // enemy.draw()
     drawTime()
     move()
+    // bisketo.draw()
   }
 
   function gameOver () {
-
+    if (drawTime.time === 0) {
+      ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+      // return
+    }
   }
 
 
@@ -175,6 +196,7 @@ function drawTime(){
   ctxP1.fillText(timePrint,520,30)
 }
 
+
 function move () {
   if(!player1.grounded){
     player1.y += player1.velY
@@ -183,7 +205,7 @@ function move () {
   if(player1.y>floor.y){
     player1.grounded = true
     player1.jumping = false
-    player1.y = floor.y - player1.height
+    player1.y = floor.y - player1.height+20
   }
   player1.x += player1.velX
   player1.velX *= friction
@@ -201,7 +223,7 @@ function move () {
       player1.velY = 0
       player1.grounded = false
       player1.jumping = true
-      player1.velY += -player1.jumpStrength*2
+      player1.velY += -player1.jumpStrength
       
     } 
   }
@@ -214,6 +236,7 @@ let planet1 = new Planet1()
 let player1 = new Farah()
 // let enemy = new Alien()
 let floor = new Floor()
+// let bisketo = new Bisketo()
 
 // LISTENERS
 
@@ -223,26 +246,45 @@ addEventListener('keydown', e=>{
     player1.y = 0
     player1.grounded = false
     player1.velY = 0
-    document.getElementById('w-key').classList.toggle('key-press')
   }
-  if(e.keyCode === 68) {
-    document.getElementById("d-key").classList.toggle("key-press")
-  }
+
   keys[e.keyCode] = true
 })
 
+addEventListener('keydown', e => {
+  if (e.keyCode === 87) {
+    document.getElementById('w-key').classList.toggle('key-press')
+  }
+  if (e.keyCode === 68) {
+    document.getElementById("d-key").classList.toggle("key-press")
+  }
+  if (e.keyCode === 65) {
+    document.getElementById('a-key').classList.toggle('key-press')
+  }
+  if (e.keyCode === 83) {
+    document.getElementById('s-key').classList.toggle('key-press')
+  }
+})
 
+addEventListener('keyup', e => {
+  if (e.keyCode === 87) {
+    document.getElementById('w-key').classList.toggle('key-press')
+  }
+  if (e.keyCode === 68) {
+    document.getElementById("d-key").classList.toggle("key-press")
+  }
+  if (e.keyCode === 65) {
+    document.getElementById('a-key').classList.toggle('key-press')
+  }
+  if (e.keyCode === 83) {
+    document.getElementById('s-key').classList.toggle('key-press')
+  }
+})
 
 addEventListener('keyup', e=>{
   keys[e.keyCode] = false
-  document.getElementById('w-key').classList.toggle('key-press')
 })
 
-// addEventListener('keypress', e => {
-//   if (e.keyCode === 65) {
-//     clearInterval(interval);
-//   }
-// })
 
 // ACTIONS 
 

@@ -84,19 +84,21 @@ p {
 }
 
 #game-instructions {
-  width: 600px;
+  width: 1200px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-content: center;
+  height: 80px;
   flex-wrap: wrap;
   color: whitesmoke;
   font-family: Avenir;
+  margin: 50px;
 }
 
-/* #game-instructions img {
+#game-instructions img {
   width: 20px;
   height: 20px;
-} */
+}
 
 #storyline p {
   font-size: 15px;
