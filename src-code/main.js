@@ -87,23 +87,20 @@ class Planet1 {
   }
 
   draw () {
-
-//RETURN HERE. MOVING BACKGROUND STILL DOESN'T WORK.
-
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)    
+    ctxP1.drawImage(this.image2, this.x - this.width, this.y, this.width, this.height)
+    ctxP1.drawImage(this.image2, this.x + this.width, this.y, this.width, this.height)
+
     if (this.x < -canvasP1.width) {
       this.x = 0
     } 
     
     if (keys[65]) {
       this.x++
-      ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
-      ctxP1.drawImage(this.image2, this.x - this.width, this.y, this.width, this.height)
+      
     }
     if (keys[68]) {
       this.x--
-      ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
-      ctxP1.drawImage(this.image2, this.x + this.width*2, this.y, this.width, this.height)
     }
 
   }
