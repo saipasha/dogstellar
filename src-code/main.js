@@ -17,7 +17,7 @@ ctxP2.fillRect(0,0,600,400)
 // VARIABLES GRAL
 let interval
 let frames = 0
-let enemyGenerator = ['generateEnemy', 'generateBisketo']
+let itemGenerator = ['generateEnemy', 'generateBisketo']
 let images = {
   bisketo: "../images/bisketo.png",
   farahWalk1: "../images/farah-choose.png",
@@ -34,21 +34,26 @@ let images = {
 let sounds = {
 
 }
-let gravityMann = .28
-let gravityEdmund = .80
-let frictionMann = .3
-let frictionEdmund = .8
+let gravityMann = .162
+let gravityEdmund = .981
+let frictionMann = .21
+let frictionEdmund = .42
+let secMann = 40
+let secEdmund = 70
 let keys = {}
+let bisketoCounter = 0
 
 
 // VARIABLES P1
 let p1 = ""
 let enemiesP1 = []
+let bisketosP1 = []
 
 
 // VARIABLES P2
 let p2 = ""
 let enemiesP2 = []
+let bisketosP2 = []
 
 
 // CLASSES
@@ -153,6 +158,23 @@ class FloorP2 {
     }
   }
 
+class BisketoP1 {
+  constructor () {
+    this.x = Math.floor(Math.random() * canvasP1.width-100)
+    this.y = 20
+    this.width = 40
+    this.height = 40
+    this.imageBisketo = new Image()
+    this.imageBisketo.src = "../images/bisketo.png"
+    this.imageBisketo.onload = this.draw.bind(this)
+  }
+
+  draw () {
+    this.y += 5
+    ctxP1.drawImage(this.imageBisketo, this.x, this.y, this.width, this.height)
+  }
+}
+
 class Farah {
   constructor () {
     this.x = 270
@@ -174,9 +196,18 @@ class Farah {
   draw () {
     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
   }
+
+  checkIfTouch(aBisketo) { //A clase's method can receive another object
+    return (
+      this.x < aBisketo.x + aBisketo.width &&
+      this.x + this.width > aBisketo.x &&
+      this.y < aBisketo.y + aBisketo.height &&
+      this.y + this.height > aBisketo.y
+      )
+  }
 }
 
-
+//TOMASA'S MISSING CHECK IF TOUCH W/ BISKETO P2
 class Tomasa {
   constructor () {
     this.x = 180
@@ -202,18 +233,18 @@ class Tomasa {
 
 // class Bisketo {
 //   constructor () {
-//     this.x = 0
-//     this.y = Math.floor(Math.random()*100) + 100
+//     this.x = Math.floor(Math.random()*canvas.width)
+//     this.y = -20
 //     this.width = 100
 //     this.height = 40
-//     this.image = new Image()
-//     this.image.src = "../images/bisketo.png"
-//     this.image.onload = draw()
+//     this.imageBisketo = new Image()
+//     this.imageBisketo.src = "../images/bisketo.png"
+//     this.imageBisketo.onload = draw()
 //   }
 
 //   draw() {
-//     this.x++
-//     ctxP1.drawImage(this.image, this.x, this.y, this.width, this.height)
+//     this.y++
+//     ctxP1.drawImage(this.imageBisketo, this.x, this.y, this.width, this.height)
 //   }
 // }
 
@@ -256,24 +287,60 @@ class Tomasa {
     player2.draw()
     moveP2()
     drawTimeP1()
+    drawTimeP2()
+    generateBisketoP1()
+    drawBisketosP1()
+    bisketoCollitionP1()
     // enemy.draw()
     // bisketo.draw()
   }
 
-  function gameOver () {
-    if (drawTime.time === 0) {
-      ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
-      // return
+  function gameOverP1 () {
+    if (drawTimeP1.timeP1 === 0) {
+      // youWinP2() CREATE A FUNCTION FOR THE WINNER
+      // ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+      // clearInterval(interval);
+      console.log("lol")
     }
   }
 
 
 // AUX FUNCTIONS
 
+function generateBisketoP1 () {
+  if (frames % 100 !== 0) return
+  let aBisketo = new BisketoP1
+  bisketosP1.push(aBisketo)
+  console.log(bisketosP1)
+}
+
+function drawBisketosP1 () {
+  bisketosP1.forEach((aBisketo, index) => {
+    if (aBisketo.y > 302) {
+      bisketosP1.splice(index,1)
+    }
+    aBisketo.draw()
+  })
+}
+
+function bisketoCollitionP1 () {
+  bisketosP1.forEach (aBisketo => {
+    if (player1.checkIfTouch(aBisketo)) {
+      gameOver()
+    }
+  })
+}
+
 function drawTimeP1(){
-  let time = (180 - Math.floor(frames/60))
-  let timePrint = "T-" + time + " sec"
-  document.getElementById('timeP1').textContent(timePrint)
+  let timeP1 = 180 - Math.floor(frames/secMann)
+  let timePrintP1 = "T-" + timeP1 + " sec"
+  document.getElementById('timeP1').textContent = timePrintP1
+}
+
+function drawTimeP2(){
+  let timeP2 = 180 - Math.floor(frames/secEdmund)
+  let timePrintP2 = "T-" + timeP2 + " sec"
+  document.getElementById('timeP2').textContent = timePrintP2
 }
 
 
@@ -302,7 +369,7 @@ function moveP1 () {
       player1.velY = 0
       player1.grounded = false
       player1.jumping = true
-      player1.velY += -player1.jumpStrength
+      player1.velY -= player1.jumpStrength
       
     } 
   }
@@ -316,7 +383,7 @@ function moveP2 () {
   if(player2.y>floorP2.y){
     player2.grounded = true
     player2.jumping = false
-    player2.y = floorP2.y - player2.height+25
+    player2.y = floorP2.y - player2.height+20
   }
   player2.x += player2.velX
   player2.velX *= frictionEdmund
