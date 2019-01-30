@@ -1,4 +1,5 @@
 
+
 // GET CANVAS
 
 const canvasP1 = document.getElementById('player1')
@@ -28,7 +29,7 @@ let images = {
   mannFloor: "../images/manns-floor-pixel.gif",
   mannPlanetFlip: "../images/mann-planet-pixel-flip.png",
   edmundPlanet: "../images/edmunds-planet-pixel.gif",
-  edmundPlanetFlip: "../images/edmunds-planet-pixel-flip.gif",
+  edmundPlanetFlip: "../images/edmunds-planet-pixel-flip.png",
   edmundFloor: "../images/edmunds-planet-floor-pixel.gif",
 }
 let sounds = {
@@ -148,11 +149,11 @@ class FloorP2 {
       } 
       
       if (keys[39]) {
-        this.x++
+        this.x--
         
       }
       if (keys[37]) {
-        this.x--
+        this.x++
       }
   
     }
@@ -161,7 +162,7 @@ class FloorP2 {
 class BisketoP1 {
   constructor () {
     this.x = Math.floor(Math.random() * canvasP1.width-100)
-    this.y = 20
+    this.y = -20
     this.width = 40
     this.height = 40
     this.imageBisketo = new Image()
@@ -326,7 +327,7 @@ function drawBisketosP1 () {
 function bisketoCollitionP1 () {
   bisketosP1.forEach (aBisketo => {
     if (player1.checkIfTouch(aBisketo)) {
-      gameOver()
+      gameOverP1()
     }
   })
 }
@@ -430,6 +431,27 @@ addEventListener('keydown', e=>{
   }
 
   keys[e.keyCode] = true
+})
+
+addEventListener('keydown', e => {
+  if (e.keyCode === 49) {
+    document.getElementById('player1').classList.remove('off')
+    document.getElementById('onePlayer').classList.add('off')
+    document.getElementById('twoPlayer').classList.add('off')
+    document.getElementById('keys-left').classList.remove('off')
+    document.getElementById('keys-left').classList.add('on')
+  }
+
+  if (e.keyCode === 50) {
+    document.getElementById('player1').classList.remove('off')
+    document.getElementById('player2').classList.remove('off')
+    document.getElementById('onePlayer').classList.add('off')
+    document.getElementById('twoPlayer').classList.add('off')
+    document.getElementById('keys-left').classList.remove('off')
+    document.getElementById('keys-left').classList.add('on')
+    document.getElementById('keys-right').classList.remove('off')
+    document.getElementById('keys-right').classList.add('on')
+  }
 })
 
 addEventListener('keydown', e => {

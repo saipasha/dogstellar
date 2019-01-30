@@ -6,6 +6,35 @@ html, body {
   background-image: url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/jPLiQ-9/looped-4kuhd-nebula-galaxy-star-space-background-for-different-events-and-projects_rm2jcfxb__F0012.png');
 }
 
+.default {
+  display: flex;
+  justify-content: center;
+  font-family: Avenir;
+  font-size: 20px;
+  width: 250px;
+  font-weight: 700;
+  border-radius: 20px;
+  border: 2px solid gainsboro;
+  margin: 100px auto 100px auto;
+  padding: 40px;
+  color: gainsboro;
+}
+
+.choose{
+  background-color: gainsboro;
+  color: black;
+  font-weight: 600;
+}
+
+
+.off {
+  display: none;
+}
+
+.on {
+  display:flex;
+}
+
 #twoCanvas {
   display: flex;
   flex-direction: row;
@@ -61,7 +90,6 @@ p {
 #keys-left {
   height: 100px;
   width: 250px;
-  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
@@ -70,7 +98,6 @@ p {
 #keys-right {
   height: 100px;
   width: 250px;
-  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
@@ -87,7 +114,7 @@ p {
   color: white;
   font-family: Avenir;
   font-size: 15px;
-  margin: 5px auto auto 80px;
+  margin: 5px auto auto 100px;
 }
 
 #game-instructions {
@@ -102,10 +129,10 @@ p {
   margin: auto 50px auto 50px;
 }
 
-#game-instructions img {
+/* #game-instructions img {
   width: 20px;
   height: 20px;
-}
+} */
 
 #storyline p {
   font-size: 15px;
