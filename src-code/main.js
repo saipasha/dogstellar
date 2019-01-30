@@ -327,9 +327,9 @@ function generateBisketoP1 () {
 
 
 function generateAlienP1 () {
-  let alienTime = [100,400,300,200]
+  // let alienTime = [100,400,300,200]
   // let randomAlien = Math.floor(Math.random()*alienTime[Math.floor(Math.random()*i.length)])
-  if (frames % alienTime !== 0) return
+  if (frames % 100 !== 0) return
   let anAlien = new AlienP1
   enemiesP1.push(anAlien)
   console.log(enemiesP1)
