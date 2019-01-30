@@ -177,20 +177,26 @@ class BisketoP1 {
 
 class AlienP1 {
   constructor () {
-    this.x = -30
+    this.sx = 1069
+    this.sy = 252
+    this.x = -20
     this.y = 252
+    this.w = 960
+    this.aux = 0
     this.width = 60
     this.height = 60
     this.imageAlien = new Image()
     this.imageAlien.src = "../images/alien.png"
     this.imageAlien.onload = this.draw.bind(this)
   }
-
   draw () {
     this.x += 3
-    ctxP1.drawImage(this.imageAlien, this.x, this.y, this.width, this.height)
-  }
+    ctxP1.drawImage(this.imageAlien, this.sx, this.sy, this.w, this.imageAlien.height, this.x, this.y, 60, 60)
+    if (frames % 50 === 0) this.sx = 0
+    else if (frames % 100 === 0)this.sx = 1069
+  }  
 }
+
 
 class Farah {
   constructor () {
@@ -299,8 +305,10 @@ class Tomasa {
     drawTimeP2()
     generateBisketoP1()
     drawBisketosP1()
-    bisketoCollitionP1()
-    generateAlienP1()
+    // bisketoCollitionP1()
+    if (frames % Math.floor(Math.random() * 10) === 0) {
+      generateAlienP1()
+    }
     drawAlienP1()
     alienCollitionP1()
     // enemy.draw()
@@ -320,7 +328,7 @@ class Tomasa {
 
 function generateBisketoP1 () {
   if (frames % 100 !== 0) return
-  let aBisketo = new BisketoP1
+  let aBisketo = new BisketoP1()
   bisketosP1.push(aBisketo)
   console.log(bisketosP1)
 }
@@ -330,14 +338,14 @@ function generateAlienP1 () {
   // let alienTime = [100,400,300,200]
   // let randomAlien = Math.floor(Math.random()*alienTime[Math.floor(Math.random()*i.length)])
   if (frames % 100 !== 0) return
-  let anAlien = new AlienP1
+  let anAlien = new AlienP1()
   enemiesP1.push(anAlien)
   console.log(enemiesP1)
 }
 
 function drawBisketosP1 () {
   bisketosP1.forEach((aBisketo, index) => {
-    if (aBisketo.y > 302) {
+    if (aBisketo.y > 352) {
       bisketosP1.splice(index,1)
     }
     aBisketo.draw()
@@ -346,24 +354,36 @@ function drawBisketosP1 () {
 
 function drawAlienP1 () {
   enemiesP1.forEach((anAlien, index) => {
-    if (anAlien.y > 302) {
+    if (anAlien.x > 700) {
       enemiesP1.splice(index,1)
     }
     anAlien.draw()
   })
 }
 
-function bisketoCollitionP1 () {
-  bisketosP1.forEach (aBisketo => {
-    addEventListener('keydown', e => {
-      if (e === 83) {
-        if (player1.checkIfTouch(aBisketo)) {
-          bisketosP1.splice(index,1)
-          console.log("lol")
-          bisketoCounter++
-        }
-      }
-    })
+// function bisketoCollitionP1 () {
+//   bisketosP1.forEach (aBisketo => {
+//     addEventListener('keydown', e => {
+//       if (e === 83) {
+//         if (player1.checkIfTouch(aBisketo)) {
+//           bisketosP1.splice(index,1)
+//           console.log("lol")
+//           bisketoCounter++
+//         }
+//       }
+//     })
+//   })
+// }
+
+
+
+function bisketoCollitionP1() {
+  bisketosP1.forEach((bisketo, index) => {
+    if (player1.checkIfTouch(bisketo)) {
+      bisketoCounter++
+      bisketosP1.splice(index, 1)
+      console.log(bisketoCounter)
+    }
   })
 }
 
@@ -477,14 +497,16 @@ let player2 = new Tomasa()
 // LISTENERS
 
 
-addEventListener('keydown', e=>{
+addEventListener('keydown', e => {
   if(e.keyCode === 87){
     player1.y = 0
     player1.grounded = false
     player1.velY = 0
   }
-
   keys[e.keyCode] = true
+  if (e.keyCode === 83) {
+    bisketoCollitionP1()
+  }
 })
 
 addEventListener('keydown', e => {
