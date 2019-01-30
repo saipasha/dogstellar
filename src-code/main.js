@@ -8,8 +8,8 @@ const ctxP1 = canvasP1.getContext('2d')
 
 const canvasP2 = document.getElementById('player2')
 const ctxP2 = canvasP2.getContext('2d')
-ctxP2.fillStyle = "grey"
-ctxP2.fillRect(0,0,600,400)
+// ctxP2.fillStyle = "grey"
+// ctxP2.fillRect(0,0,600,400)
 
 // ON LOAD
 
@@ -34,14 +34,15 @@ let images = {
 let sounds = {
 
 }
-let gravityMann = .98
+let gravityMann = .981
 let gravityEdmund = .981
 let frictionMann = .8
-let frictionEdmund = .42
-let secMann = 40
-let secEdmund = 70
+let frictionEdmund = .8
+let secMann = 60
+let secEdmund = 60
 let keys = {}
 let bisketoCounter = 0
+let bisketoP2Counter = 0
 
 
 // VARIABLES P1
@@ -120,7 +121,7 @@ class FloorP2 {
       if (keys[68]) {
         this.x--
       }
-  
+
     }
   }
 
@@ -161,7 +162,24 @@ class FloorP2 {
 class BisketoP1 {
   constructor () {
     this.x = Math.floor(Math.random() * canvasP1.width-100)
-    this.y = -20
+    this.y = -40
+    this.width = 40
+    this.height = 40
+    this.imageBisketo = new Image()
+    this.imageBisketo.src = "../images/bisketo.png"
+    this.imageBisketo.onload = this.draw.bind(this)
+  }
+
+  draw () {
+    this.y += 3
+    ctxP1.drawImage(this.imageBisketo, this.x, this.y, this.width, this.height)
+  }
+}
+
+class BisketoP2 {
+  constructor () {
+    this.x = Math.floor(Math.random() * canvasP2.width-100)
+    this.y = -40
     this.width = 40
     this.height = 40
     this.imageBisketo = new Image()
@@ -171,7 +189,7 @@ class BisketoP1 {
 
   draw () {
     this.y += 5
-    ctxP1.drawImage(this.imageBisketo, this.x, this.y, this.width, this.height)
+    ctxP2.drawImage(this.imageBisketo, this.x, this.y, this.width, this.height)
   }
 }
 
@@ -192,8 +210,8 @@ class AlienP1 {
   draw () {
     this.x += 3
     ctxP1.drawImage(this.imageAlien, this.sx, this.sy, this.w, this.imageAlien.height, this.x, this.y, 60, 60)
-    if (frames % 50 === 0) this.sx = 0
-    else if (frames % 100 === 0)this.sx = 1069
+    // if (frames % 50 === 0) this.sx = 0
+    // else if (frames % 100 === 0)this.sx = 1069
   }  
 }
 
@@ -211,7 +229,7 @@ class Farah {
     this.velY = 0
     this.grounded = true
     this.jumping = false
-    this.jumpStrength = 7
+    this.jumpStrength = 9
     //horizontal
     this.velX = 0
     this.hp = 100
@@ -247,12 +265,18 @@ class Tomasa {
     this.image.src = images.tomasaChoose
     this.image.onload = this.draw()
     // vertical physics
-    this.velY = 2
+    this.velY = 0
     this.grounded = true
     this.jumping = false
-    this.jumpStrength = 9
+    this.jumpStrength = 15
     //horizontal
     this.velX = 0
+    this.hp = 100
+  }
+
+  drawHP() {
+    ctxP2.fillStyle = "darkred"
+    ctxP2.fillRect(20, 20, this.hp * 2, 20)
   }
 
   draw() {
@@ -288,19 +312,23 @@ class Tomasa {
     player1.draw()
     player1.drawHP()
     player2.draw()
+    player2.drawHP()
+    moveP1()
     moveP2()
     drawTimeP1()
     drawTimeP2()
     generateBisketoP1()
+    generateBisketoP2()
     drawBisketosP1()
+    drawBisketosP2()
     // bisketoCollitionP1()
+    // bisketoCollitionP2()
     if (frames % Math.floor(Math.random() * 10) === 0) {
       generateAlienP1()
     }
     drawAlienP1()
     alienCollitionP1()
     // enemy.draw()
-    moveP1()
   }
 
   function gameOverP1 () {
@@ -317,10 +345,15 @@ class Tomasa {
 
 function generateBisketoP1 () {
   if (frames % 100 !== 0) return
-  let aBisketo = new BisketoP1()
-  bisketosP1.push(aBisketo)
+  let bisketo = new BisketoP1()
+  bisketosP1.push(bisketo)
 }
 
+function generateBisketoP2 () {
+  if (frames % 100 !== 0) return
+  let bisketoP2 = new BisketoP2()
+  bisketosP2.push(bisketoP2)
+}
 
 function generateAlienP1 () {
   // let alienTime = [100,400,300,200]
@@ -332,11 +365,20 @@ function generateAlienP1 () {
 }
 
 function drawBisketosP1 () {
-  bisketosP1.forEach((aBisketo, index) => {
-    if (aBisketo.y > 352) {
+  bisketosP1.forEach((bisketo, index) => {
+    if (bisketo.y > 352) {
       bisketosP1.splice(index,1)
     }
-    aBisketo.draw()
+    bisketo.draw()
+  })
+}
+
+function drawBisketosP2 () {
+  bisketosP2.forEach((bisketoP2, index) => {
+    if (bisketoP2.y > 352) {
+      bisketosP2.splice(index,1)
+    }
+    bisketoP2.draw()
   })
 }
 
@@ -349,27 +391,21 @@ function drawAlienP1 () {
   })
 }
 
-// function bisketoCollitionP1 () {
-//   bisketosP1.forEach (aBisketo => {
-//     addEventListener('keydown', e => {
-//       if (e === 83) {
-//         if (player1.checkIfTouch(aBisketo)) {
-//           bisketosP1.splice(index,1)
-//           console.log("lol")
-//           bisketoCounter++
-//         }
-//       }
-//     })
-//   })
-// }
-
-
 function bisketoCollitionP1() {
   bisketosP1.forEach((bisketo, index) => {
     if (player1.checkIfTouch(bisketo)) {
       bisketoCounter++
       bisketosP1.splice(index, 1)
-      console.log(bisketoCounter)
+    }
+  })
+}
+
+function bisketoCollitionP2() {
+  bisketosP2.forEach((bisketoP2, index) => {
+    if (player1.checkIfTouch(bisketoP2)) {
+      bisketoP2Counter++
+      bisketosP2.splice(index, 1)
+      console.log(bisketoP2Counter)
     }
   })
 }
@@ -384,12 +420,10 @@ function alienCollitionP1 () {
 }
 
 function showCounter () {
-  /////////
+  ctxP1.drawImage()
 }
 
-function lessOxygen () {
-  /////////
-}
+
 
 function drawTimeP1(){
   let timeP1 = 180 - Math.floor(frames/secMann)
@@ -479,9 +513,8 @@ let player2 = new Tomasa()
 addEventListener('keydown', e => {
   
   keys[e.keyCode] = true
-  if (e.keyCode === 83) {
-    bisketoCollitionP1()
-  }
+  if (e.keyCode === 83) { bisketoCollitionP1() }
+  if (e.keyCode === 40) { bisketoCollitionP2() }
 
   //DOM
   if (e.keyCode === 49) {
@@ -512,81 +545,6 @@ addEventListener('keydown', e => {
   if (e.keyCode === 40) { document.getElementById('down-key').classList.add('key-press') }
   if (e.keyCode === 39) { document.getElementById('right-key').classList.add('key-press') }
 })
-
-// addEventListener('keydown', e => {
-//   if (e.keyCode === 49) {
-//     document.getElementById('player1').classList.remove('off')
-//     document.getElementById('onePlayer').classList.add('off')
-//     document.getElementById('twoPlayer').classList.add('off')
-//     document.getElementById('keys-left').classList.remove('off')
-//     document.getElementById('keys-left').classList.add('on')
-//   }
-
-//   if (e.keyCode === 50) {
-//     document.getElementById('player1').classList.remove('off')
-//     document.getElementById('player2').classList.remove('off')
-//     document.getElementById('onePlayer').classList.add('off')
-//     document.getElementById('twoPlayer').classList.add('off')
-//     document.getElementById('keys-left').classList.remove('off')
-//     document.getElementById('keys-left').classList.add('on')
-//     document.getElementById('keys-right').classList.remove('off')
-//     document.getElementById('keys-right').classList.add('on')
-//   }
-// })
-
-// addEventListener('keydown', e => {
-//   if (e.keyCode === 87) {
-//     document.getElementById('w-key').classList.add('key-press')
-//   }
-//   if (e.keyCode === 68) {
-//     document.getElementById("d-key").classList.add("key-press")
-//   }
-//   if (e.keyCode === 65) {
-//     document.getElementById('a-key').classList.add('key-press')
-//   }
-//   if (e.keyCode === 83) {
-//     document.getElementById('s-key').classList.add('key-press')
-//   }
-//   if (e.keyCode === 38) {
-//     document.getElementById('up-key').classList.add('key-press')
-//   }
-//   if (e.keyCode === 37) {
-//     document.getElementById('left-key').classList.add('key-press')
-//   }
-//   if (e.keyCode === 40) {
-//     document.getElementById('down-key').classList.add('key-press')
-//   }
-//   if (e.keyCode === 39) {
-//     document.getElementById('right-key').classList.add('key-press')
-//   }
-// })
-
-// addEventListener('keyup', e => {
-//   if (e.keyCode === 87) {
-//     document.getElementById('w-key').classList.remove('key-press')
-//   }
-//   if (e.keyCode === 68) {
-//     document.getElementById("d-key").classList.remove("key-press")
-//   }
-//   if (e.keyCode === 65) {
-//     document.getElementById('a-key').classList.remove('key-press')
-//   }
-//   if (e.keyCode === 83) {
-//     document.getElementById('s-key').classList.remove('key-press')
-//   }
-//   if (e.keyCode === 38) {
-//     document.getElementById('up-key').classList.remove('key-press')
-//   }
-//   if (e.keyCode === 37) {
-//     document.getElementById('left-key').classList.remove('key-press')
-//   }
-//   if (e.keyCode === 40) {
-//     document.getElementById('down-key').classList.remove('key-press')
-//   }
-//   if (e.keyCode === 39) {
-//     document.getElementById('right-key').classList.remove('key-press')
-//   }
-// })
 
 addEventListener('keyup', e=>{
   console.log(player1)
