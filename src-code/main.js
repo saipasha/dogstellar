@@ -21,19 +21,19 @@ let gameStarted = false
 let interval
 let frames = 0
 let images = {
-  bisketo: "./images/bisketo.png",
-  farahChoose: "./images/farah-choose.png",
-  tomasaChoose: "./images/tomasa-choose.png",
-  planet1Bg:"./images/planet1Bg.png",
-  alien: "./images/alien.png",
-  mannPlanet: "./images/mann-planet-pixel.png",
-  mannFloor: "./images/manns-floor-pixel.gif",
-  mannPlanetFlip: "./images/mann-planet-pixel-flip.png",
-  edmundPlanet: "./images/edmunds-planet-pixel.gif",
-  edmundPlanetFlip: "./images/edmunds-planet-pixel-flip.png",
-  edmundFloor: "./images/edmunds-planet-floor-pixel.gif",
-  gargantua: "./images/Gargantua.gif",
-  snowball8bit: "./images/Snowball-8.png",
+  bisketo: "../images/bisketo.png",
+  farahChoose: "../images/farah-choose.png",
+  tomasaChoose: "../images/tomasa-choose.png",
+  planet1Bg:"../images/planet1Bg.png",
+  alien: "../images/alien.png",
+  mannPlanet: "../images/mann-planet-pixel.png",
+  mannFloor: "../images/manns-floor-pixel.gif",
+  mannPlanetFlip: "../images/mann-planet-pixel-flip.png",
+  edmundPlanet: "../images/edmunds-planet-pixel.gif",
+  edmundPlanetFlip: "../images/edmunds-planet-pixel-flip.png",
+  edmundFloor: "../images/edmunds-planet-floor-pixel.gif",
+  gargantua: "../images/Gargantua.gif",
+  snowball8bit: "../images/Snowball-8.png",
 }
 let sounds = {
 
