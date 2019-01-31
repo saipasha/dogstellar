@@ -13,6 +13,7 @@ const ctxP2 = canvasP2.getContext('2d')
 
 // ON LOAD
 
+
 // window.onload(ctxP1.font = 'Avenir 50px')
 
 // VARIABLES GRAL
@@ -30,6 +31,8 @@ let images = {
   edmundPlanet: "../images/edmunds-planet-pixel.gif",
   edmundPlanetFlip: "../images/edmunds-planet-pixel-flip.png",
   edmundFloor: "../images/edmunds-planet-floor-pixel.gif",
+  gargantua: "../images/Gargantua.gif",
+  snowball8bit: "../images/Snowball-8.png",
 }
 let sounds = {
 
@@ -41,9 +44,8 @@ let frictionEdmund = .8
 let secMann = 60
 let secEdmund = 60
 let keys = {}
-let bisketoCounter = 0
+let bisketoP1Counter = 0
 let bisketoP2Counter = 0
-
 
 // VARIABLES P1
 let p1 = ""
@@ -58,6 +60,25 @@ let bisketosP2 = []
 
 
 // CLASSES
+
+class Cover {
+  contructor () {
+    this.x = 0
+    this.y = 0
+    this.width = canvasP1.width
+    this.height = canvasP1.height
+    this.gargantuaP1 = new Image()
+    this.gargantuaP1.src = images.gargantua
+    this.gargantuaP1.onload = this.draw.bind(this)
+
+  }
+  
+  draw() {
+    ctxP1.drawImage(this.gargantuaP1, 0, 0, canvasP1.width, canvasP1.height)
+    ctxP1.font = "40px 'Major Mono Display'"
+    ctxP1.fillText("Press S to start",200,200)
+  }
+}
 
 class FloorP1 {
   constructor () {
@@ -98,11 +119,10 @@ class FloorP2 {
       this.width = canvasP1.width
       this.height = canvasP1.height
       this.image = new Image()
-      this.image.src = images.mannPlanet
-      // this.image.onload = this.draw()  
+      this.image.src = images.mannPlanet 
       this.image2 = new Image()
       this.image2.src = images.mannPlanetFlip
-      this.image.onload = this.draw()
+      this.image.onload = this.draw.bind(this)
     }
   
     draw () {
@@ -122,6 +142,16 @@ class FloorP2 {
         this.x--
       }
 
+    }
+
+    drawScore () {
+      this.bisketoP1 = new Image()
+      this.bisketoP1.src = images.bisketo
+      this.image.onload = this.draw.bind(this)  
+      ctxP1.drawImage(this.bisketoP1, 500, 20, 30, 30)
+      ctxP1.font = "20px 'Major Mono Display'"
+      ctxP1.fillStyle = "khaki"  
+      ctxP1.fillText(bisketoP1Counter, 540, 42)
     }
   }
 
@@ -157,11 +187,21 @@ class FloorP2 {
       }
   
     }
+
+    drawScore () {
+      this.bisketoP2 = new Image()
+      this.bisketoP2.src = images.bisketo
+      this.image.onload = this.draw.bind(this)  
+      ctxP1.drawImage(this.bisketoP2, 500, 20, 30, 30)
+      ctxP1.font = "20px 'Major Mono Display'"
+      ctxP1.fillStyle = "khaki"  
+      ctxP1.fillText(bisketoP2Counter, 540, 42)
+    }
   }
 
 class BisketoP1 {
   constructor () {
-    this.x = Math.floor(Math.random() * canvasP1.width-100)
+    this.x = Math.floor(Math.random() * canvasP1.width)
     this.y = -40
     this.width = 40
     this.height = 40
@@ -193,23 +233,19 @@ class BisketoP2 {
   }
 }
 
-class AlienP1 {
+class Snowball {
   constructor () {
-    this.sx = 1069
-    this.sy = 252
     this.x = -20
-    this.y = 252
-    this.w = 960
-    this.aux = 0
-    this.width = 60
-    this.height = 60
-    this.imageAlien = new Image()
-    this.imageAlien.src = "../images/alien.png"
-    this.imageAlien.onload = this.draw.bind(this)
+    this.y = 230
+    this.width = 20
+    this.height = 20
+    this.imageSnowball = new Image()
+    this.imageSnowball.src = images.snowball8bit
+    this.imageSnowball.onload = this.draw.bind(this)
   }
   draw () {
     this.x += 3
-    ctxP1.drawImage(this.imageAlien, this.sx, this.sy, this.w, this.imageAlien.height, this.x, this.y, 60, 60)
+    ctxP1.drawImage(this.imageSnowball, this.x, this.y, this.width, this.height)
     // if (frames % 50 === 0) this.sx = 0
     // else if (frames % 100 === 0)this.sx = 1069
   }  
@@ -219,9 +255,9 @@ class AlienP1 {
 class Farah {
   constructor () {
     this.x = 180
-    this.y = 223
-    this.width = 100
-    this.height = 110
+    this.y = 250
+    this.width = 40
+    this.height = 60
     this.image = new Image()
     this.image.src = images.farahChoose
     this.image.onload = this.draw()
@@ -294,8 +330,8 @@ class Tomasa {
 }
 
 
-
 //MAIN FUNCTIONS
+  // window.onload(gameCover())
 
   function startGame () {
     setInterval(update, 1000/60)
@@ -311,6 +347,7 @@ class Tomasa {
     floorP2.draw()
     player1.draw()
     player1.drawHP()
+    planet1.drawScore()
     player2.draw()
     player2.drawHP()
     moveP1()
@@ -324,10 +361,10 @@ class Tomasa {
     // bisketoCollitionP1()
     // bisketoCollitionP2()
     if (frames % Math.floor(Math.random() * 10) === 0) {
-      generateAlienP1()
+      generateSnowball()
     }
-    drawAlienP1()
-    alienCollitionP1()
+    drawSnowball()
+    snowballCollitionP1()
     // enemy.draw()
   }
 
@@ -337,11 +374,19 @@ class Tomasa {
       // ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
       // clearInterval(interval);
     }
-    console.log("lol")
   }
 
 
 // AUX FUNCTIONS
+
+function drawCoverMultiplayer () {
+  ctxP1.drawImage("../images/Gargantua.gif", 0, 0, canvasP1.width, canvasP1.height)
+  ctxP2.drawImage("../images/Gargantua.gif", 0, 0, canvasP2.width, canvasP2.height)
+  ctxP1.font = "40px 'Major Mono Display'"
+  ctxP1.fillText("Press S to start",200,200)
+  ctxP1.font = "40px 'Major Mono Display'"
+  ctxP2.fillText("Press &#9660 to start",200,200)
+}
 
 function generateBisketoP1 () {
   if (frames % 100 !== 0) return
@@ -355,12 +400,12 @@ function generateBisketoP2 () {
   bisketosP2.push(bisketoP2)
 }
 
-function generateAlienP1 () {
+function generateSnowball () {
   // let alienTime = [100,400,300,200]
   // let randomAlien = Math.floor(Math.random()*alienTime[Math.floor(Math.random()*i.length)])
   if (frames % 100 !== 0) return
-  let anAlien = new AlienP1()
-  enemiesP1.push(anAlien)
+  let oneSnowball = new Snowball()
+  enemiesP1.push(oneSnowball)
   
 }
 
@@ -382,19 +427,19 @@ function drawBisketosP2 () {
   })
 }
 
-function drawAlienP1 () {
-  enemiesP1.forEach((anAlien, index) => {
-    if (anAlien.x > 700) {
+function drawSnowball () {
+  enemiesP1.forEach((oneSnowball, index) => {
+    if (oneSnowball.x > 700) {
       enemiesP1.splice(index,1)
     }
-    anAlien.draw()
+    oneSnowball.draw()
   })
 }
 
 function bisketoCollitionP1() {
   bisketosP1.forEach((bisketo, index) => {
     if (player1.checkIfTouch(bisketo)) {
-      bisketoCounter++
+      bisketoP1Counter++
       bisketosP1.splice(index, 1)
     }
   })
@@ -405,24 +450,18 @@ function bisketoCollitionP2() {
     if (player1.checkIfTouch(bisketoP2)) {
       bisketoP2Counter++
       bisketosP2.splice(index, 1)
-      console.log(bisketoP2Counter)
     }
   })
 }
 
-function alienCollitionP1 () {
-  enemiesP1.forEach((anAlien, index) => {
-    if (player1.checkIfTouch(anAlien)) {
+function snowballCollitionP1 () {
+  enemiesP1.forEach((oneSnowball, index) => {
+    if (player1.checkIfTouch(oneSnowball)) {
       enemiesP1.splice(index, 1)
       player1.hp -= 20
     }
   })
 }
-
-function showCounter () {
-  ctxP1.drawImage()
-}
-
 
 
 function drawTimeP1(){
@@ -442,18 +481,24 @@ function moveP1() {
     player1.y += player1.velY
     player1.velY += gravityMann
   }
-  if (player1.y > 200) {
+  if (player1.y > floorP1.y - player1.height) {
     player1.grounded = true
     player1.jumping = false
-    player1.y = floorP1.y - player1.height + 20
+    player1.y = floorP1.y - player1.height
   }
   player1.x += player1.velX
   player1.velX *= frictionMann
   if (keys[68]) {
-    player1.velX++
+    if (player1.x >= canvasP1.width - 40) {
+      player1.velX--
+    }
+    else player1.velX++
   }
   if (keys[65]) {
-    player1.velX--
+    if (player1.x < 40) {
+      player1.velX++
+    }
+    else player1.velX--
   }
   if (keys[87]) {
     if (!player1.jumping) {
@@ -470,10 +515,10 @@ function moveP2 () {
     player2.y += player2.velY
     player2.velY += gravityEdmund
   }
-  if(player2.y>floorP2.y){
+  if(player2.y > 300 ){
     player2.grounded = true
     player2.jumping = false
-    player2.y = floorP2.y - player2.height+20
+    player2.y = floorP2.y - player2.height + 20
   }
   player2.x += player2.velX
   player2.velX *= frictionEdmund
@@ -505,6 +550,7 @@ let floorP1 = new FloorP1()
 let floorP2 = new FloorP2()
 let player1 = new Farah()
 let player2 = new Tomasa()
+let gameCover = new Cover()
 
 
 // LISTENERS
@@ -516,6 +562,8 @@ addEventListener('keydown', e => {
   if (e.keyCode === 83) { bisketoCollitionP1() }
   if (e.keyCode === 40) { bisketoCollitionP2() }
 
+  if (e.keyCode === 71) { startGame() }
+
   //DOM
   if (e.keyCode === 49) {
     document.getElementById('player1').classList.remove('off')
@@ -524,6 +572,7 @@ addEventListener('keydown', e => {
     document.getElementById('keys-left').classList.remove('off')
     document.getElementById('keys-left').classList.add('on')
   }
+
   if (e.keyCode === 50) {
     document.getElementById('player1').classList.remove('off')
     document.getElementById('player2').classList.remove('off')
@@ -547,7 +596,6 @@ addEventListener('keydown', e => {
 })
 
 addEventListener('keyup', e=>{
-  console.log(player1)
   keys[e.keyCode] = false
   if (e.keyCode === 87) { document.getElementById('w-key').classList.remove('key-press') }
   if (e.keyCode === 68) { document.getElementById("d-key").classList.remove("key-press") }
@@ -562,4 +610,6 @@ addEventListener('keyup', e=>{
 
 // ACTIONS 
 
-startGame()
+
+
+
