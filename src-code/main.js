@@ -17,6 +17,7 @@ const ctxP2 = canvasP2.getContext('2d')
 // window.onload(ctxP1.font = 'Avenir 50px')
 
 // VARIABLES GRAL
+let gameStarted = false
 let interval
 let frames = 0
 let images = {
@@ -61,24 +62,24 @@ let bisketosP2 = []
 
 // CLASSES
 
-class Cover {
-  contructor () {
-    this.x = 0
-    this.y = 0
-    this.width = canvasP1.width
-    this.height = canvasP1.height
-    this.gargantuaP1 = new Image()
-    this.gargantuaP1.src = images.gargantua
-    this.gargantuaP1.onload = this.draw.bind(this)
+// class Cover {
+//   contructor () {
+//     this.x = 0
+//     this.y = 0
+//     this.width = canvasP1.width
+//     this.height = canvasP1.height
+//     this.gargantuaP1 = new Image()
+//     this.gargantuaP1.src = images.gargantua
+//     this.gargantuaP1.onload = this.draw.bind(this)
 
-  }
+//   }
   
-  draw() {
-    ctxP1.drawImage(this.gargantuaP1, 0, 0, canvasP1.width, canvasP1.height)
-    ctxP1.font = "40px 'Major Mono Display'"
-    ctxP1.fillText("Press S to start",200,200)
-  }
-}
+//   draw() {
+//     ctxP1.drawImage(this.gargantuaP1, 0, 0, canvasP1.width, canvasP1.height)
+//     ctxP1.font = "40px 'Major Mono Display'"
+//     ctxP1.fillText("Press S to start",200,200)
+//   }
+// }
 
 class FloorP1 {
   constructor () {
@@ -334,6 +335,8 @@ class Tomasa {
   // window.onload(gameCover())
 
   function startGame () {
+    gameStarted = true
+    clearCanvas()
     setInterval(update, 1000/60)
   }
 
@@ -379,14 +382,28 @@ class Tomasa {
 
 // AUX FUNCTIONS
 
-function drawCoverMultiplayer () {
-  ctxP1.drawImage("../images/Gargantua.gif", 0, 0, canvasP1.width, canvasP1.height)
-  ctxP2.drawImage("../images/Gargantua.gif", 0, 0, canvasP2.width, canvasP2.height)
-  ctxP1.font = "40px 'Major Mono Display'"
-  ctxP1.fillText("Press S to start",200,200)
-  ctxP1.font = "40px 'Major Mono Display'"
-  ctxP2.fillText("Press &#9660 to start",200,200)
+function clearCanvas () {
+  ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+  ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
 }
+
+function intro_screen() {
+  ctxP1.font = "40px 'Major Mono Display'"
+  ctxP1.fillStyle = "#fff"
+  ctxP1.textAlign = "center"
+  ctxP1.fillText("Press S to start",200,200)
+  // ctxP2.fillText("Press &#9660 to start",200,200)
+}
+
+// function drawCoverMultiplayer () {
+//   ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+//   ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+//   ctxP1.drawImage("../images/Gargantua.gif", 0, 0, canvasP1.width, canvasP1.height)
+//   ctxP2.drawImage("../images/Gargantua.gif", 0, 0, canvasP2.width, canvasP2.height)
+//   ctxP1.font = "40px 'Major Mono Display'"
+//   ctxP1.fillText("Press S to start",200,200)
+//   ctxP2.fillText("Press &#9660 to start",200,200)
+// }
 
 function generateBisketoP1 () {
   if (frames % 100 !== 0) return
@@ -550,7 +567,7 @@ let floorP1 = new FloorP1()
 let floorP2 = new FloorP2()
 let player1 = new Farah()
 let player2 = new Tomasa()
-let gameCover = new Cover()
+// let gameCover = new Cover()  
 
 
 // LISTENERS
@@ -571,6 +588,7 @@ addEventListener('keydown', e => {
     document.getElementById('twoPlayer').classList.add('off')
     document.getElementById('keys-left').classList.remove('off')
     document.getElementById('keys-left').classList.add('on')
+    intro_screen()
   }
 
   if (e.keyCode === 50) {
