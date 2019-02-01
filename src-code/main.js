@@ -13,7 +13,7 @@ const ctxP2 = canvasP2.getContext('2d')
 
 // ON LOAD
 
-// window.onload(ctxP1.font = 'Avenir 50px')
+
 
 // VARIABLES GRAL
 let gameStarted = false
@@ -33,9 +33,16 @@ let images = {
   edmundFloor: "../images/edmunds-planet-floor-pixel.gif",
   gargantua: "../images/Gargantua.gif",
   snowball8bit: "../images/Snowball-8.png",
+  rock8bit: "../images/rock8bit.png",
+  cooperStation: "../images/cooper-station-pixel.gif",
 }
 let sounds = {
-
+  bgMusic: "../sounds/InterstellarTrim.mp3",
+  bisketoSound: "../sounds/bisketo.mp3",
+  endGameSound: "../sounds/end.mp3",
+  enemyHitSound: "../sounds/enemy.mp3",
+  jumpSound: "../sounds/jump.mp3",
+  buttonSound: "../sounds/button.mp3",
 }
 let gravityMann = .781
 let gravityEdmund = .981
@@ -46,6 +53,26 @@ let secEdmund = 60
 let keys = {}
 let bisketoP1Counter = 0
 let bisketoP2Counter = 0
+
+// SOUNDS
+
+let jump = new Audio()
+jump.src = sounds.jumpSound
+
+let hit = new Audio()
+hit.src = sounds.enemyHitSound
+
+let grab = new Audio()
+grab.src = sounds.bisketoSound
+
+let button = new Audio()
+button.src = sounds.buttonSound
+
+let end = new Audio()
+end.src = sounds.endGameSound
+
+let backgroundMusic = new Audio()
+backgroundMusic.src = sounds.bgMusic
 
 // VARIABLES P1
 let p1 = ""
@@ -60,25 +87,6 @@ let bisketosP2 = []
 
 
 // CLASSES
-
-// class Cover {
-//   contructor () {
-//     this.x = 0
-//     this.y = 0
-//     this.width = canvasP1.width
-//     this.height = canvasP1.height
-//     this.gargantuaP1 = new Image()
-//     this.gargantuaP1.src = images.gargantua
-//     this.gargantuaP1.onload = this.draw.bind(this)
-
-//   }
-  
-//   draw() {
-//     ctxP1.drawImage(this.gargantuaP1, 0, 0, canvasP1.width, canvasP1.height)
-//     ctxP1.font = "40px 'Major Mono Display'"
-//     ctxP1.fillText("Press S to start",200,200)
-//   }
-// }
 
 class FloorP1 {
   constructor () {
@@ -243,10 +251,24 @@ class Snowball {
   draw () {
     this.x += 3
     ctxP1.drawImage(this.imageSnowball, this.x, this.y, this.width, this.height)
-    ctxP2.drawImage(this.imageSnowball, this.x, this.y, this.width, this.height)
   }  
 }
 
+class Rock {
+  constructor () {
+    this.x = -20
+    this.y = 230
+    this.width = 20
+    this.height = 20
+    this.image = new Image()
+    this.image.src = images.rock8bit
+    this.image.onload = this.draw.bind(this)
+  }
+  draw () {
+    this.x += 3
+    ctxP2.drawImage(this.image, this.x, this.y, this.width, this.height)
+  }  
+}
 
 class Farah {
   constructor () {
@@ -381,14 +403,17 @@ class Tomasa {
   function gameOver () {
     clearInterval(interval)
     if (player1.hp <= 0 && player2.hp <= 0) {
+      end.play()
       ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
       ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
       clearInterval(interval)
       youLoseP1()
       youLoseP2()
+
     }
 
     if (player1.hp <= 0) {
+      end.play()
       ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
       ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
       clearInterval(interval)
@@ -397,6 +422,7 @@ class Tomasa {
     }
 
     if (player2.hp <= 0) {
+      end.play()
       ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
       ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
       clearInterval(interval)
@@ -405,6 +431,7 @@ class Tomasa {
     }
 
     if (drawTimeP1() <= 0 || drawTimeP2() <= 0) {
+      end.play()
       if (bisketoP1Counter < bisketoP2Counter) {
         ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
         ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
@@ -414,6 +441,7 @@ class Tomasa {
       }
 
       if (bisketoP2Counter < bisketoP1Counter) {
+        end.play()
         ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
         ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
         clearInterval(interval)
@@ -426,16 +454,29 @@ class Tomasa {
 
 // AUX FUNCTIONS
 
+function restart ()  {
+  ctxP1.clearRect(0,0,canvasP1.width, canvasP1.height)
+  clearInterval(interval)
+  bisketoP1Counter = 0
+  bisketoP2Counter = 0
+  enemiesP1 = []
+  enemiesP2 = []
+  bisketosP1 = []
+  bisketosP2 = []
+  window.location.reload(true)
+}
+
 function youWinP1() {
   ctxP1.clearRect(0,0,canvasP1.width, canvasP1.height)
   clearInterval(interval)
   let winP1 = new Image()
-  winP1.src = "../images/Gargantua.gif"
+  winP1.src = "../images/cooper-station-pixel.gif"
   ctxP1.drawImage(winP1, 0, 0, canvasP1.width, canvasP1.height)
   ctxP1.font = "30px 'Major Mono Display'"
-  ctxP1.fillStyle = "#fff"
+  ctxP1.fillStyle = "#000"
   ctxP1.textAlign = "center"
-  ctxP1.fillText("you win",300,300)
+  ctxP1.fillText("arrived to cooper station",290,300)
+  ctxP1.fillText("press h to restart",300,50)
 }
 
 function youLoseP1() {
@@ -447,19 +488,21 @@ function youLoseP1() {
   ctxP1.font = "30px 'Major Mono Display'"
   ctxP1.fillStyle = "#fff"
   ctxP1.textAlign = "center"
-  ctxP1.fillText("you lose",300,300)
+  ctxP1.fillText("you lost",300,300)
+  ctxP1.fillText("press h to restart",300,50)
 }
 
 function youWinP2() {
   ctxP2.clearRect(0,0,canvasP2.width, canvasP2.height)
   clearInterval(interval)
   let winP2 = new Image()
-  winP2.src = "../images/Gargantua.gif"
+  winP2.src = "../images/cooper-station-pixel.gif"
   ctxP2.drawImage(winP2, 0, 0, canvasP2.width, canvasP2.height)
   ctxP2.font = "30px 'Major Mono Display'"
-  ctxP2.fillStyle = "#fff"
+  ctxP2.fillStyle = "#000"
   ctxP2.textAlign = "center"
-  ctxP2.fillText("you win",300,300)
+  ctxP2.fillText("arrived to cooper station",290,300)
+  ctxP2.fillText("press h to restart",300,50)
 }
 
 function youLoseP2() {
@@ -471,7 +514,8 @@ function youLoseP2() {
   ctxP2.font = "30px 'Major Mono Display'"
   ctxP2.fillStyle = "#fff"
   ctxP2.textAlign = "center"
-  ctxP2.fillText("you lose",300,300)
+  ctxP2.fillText("you lost",300,300)
+  ctxP2.fillText("press h to restart",300,50)
 }
 
 function clearCanvas () {
@@ -515,7 +559,7 @@ function generateSnowballP1 () {
 
 function generateSnowballP2 () {
   if (frames % 70 !== 0) return
-  let oneSnowballP2 = new Snowball()
+  let oneSnowballP2 = new Rock()
   enemiesP2.push(oneSnowballP2)
   console.log("lol")
 }
@@ -561,6 +605,7 @@ function bisketoCollitionP1() {
     if (player1.checkIfTouch(bisketo)) {
       bisketoP1Counter++
       bisketosP1.splice(index, 1)
+      return true
     }
   })
 }
@@ -577,6 +622,7 @@ function bisketoCollitionP2() {
 function snowballCollitionP1 () {
   enemiesP1.forEach((oneSnowball, index) => {
     if (player1.checkIfTouch(oneSnowball)) {
+      hit.play()
       enemiesP1.splice(index, 1)
       player1.hp -= 20
     }
@@ -586,6 +632,7 @@ function snowballCollitionP1 () {
 function snowballCollitionP2 () {
   enemiesP2.forEach((oneSnowballP2, index) => {
     if (player2.checkIfTouch(oneSnowballP2)) {
+      hit.play()
       enemiesP2.splice(index, 1)
       player2.hp -= 20
     }
@@ -634,7 +681,9 @@ function moveP1() {
     else player1.velX--
   }
   if (keys[87]) {
+    
     if (!player1.jumping) {
+      jump.play()
       player1.velY = 0
       player1.grounded = false
       player1.jumping = true
@@ -672,6 +721,7 @@ function moveP2 () {
   }
   if(keys[38]){
     if(!player2.jumping){
+      jump.play()
       player2.velY = 0
       player2.grounded = false
       player2.jumping = true
@@ -698,10 +748,28 @@ let player2 = new Tomasa()
 addEventListener('keydown', e => {
   
   keys[e.keyCode] = true
-  if (e.keyCode === 83) { bisketoCollitionP1() }
-  if (e.keyCode === 40) { bisketoCollitionP2() }
+  if (e.keyCode === 83) {
+    grab.play()
+    bisketoCollitionP1() 
+  }
+  if (e.keyCode === 40) {
+    grab.play()
+    bisketoCollitionP2() 
+  }
 
-  if (e.keyCode === 71) { startGame() }
+  if (e.keyCode === 190) {
+    backgroundMusic.play()
+  }
+
+  if (e.keyCode === 71) {
+    button.play()
+    startGame()
+  }
+
+  if (e.keyCode === 72) {
+    button.play()
+    restart()
+  }
 
   //DOM
   if (e.keyCode === 49) {
@@ -710,6 +778,7 @@ addEventListener('keydown', e => {
     document.getElementById('twoPlayer').classList.add('off')
     document.getElementById('keys-left').classList.remove('off')
     document.getElementById('keys-left').classList.add('on')
+    button.play()
     intro_screen()
   }
 
@@ -722,6 +791,7 @@ addEventListener('keydown', e => {
     document.getElementById('keys-left').classList.add('on')
     document.getElementById('keys-right').classList.remove('off')
     document.getElementById('keys-right').classList.add('on')
+    button.play()
     intro_screen()
   }
 
