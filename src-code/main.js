@@ -13,7 +13,6 @@ const ctxP2 = canvasP2.getContext('2d')
 
 // ON LOAD
 
-
 // window.onload(ctxP1.font = 'Avenir 50px')
 
 // VARIABLES GRAL
@@ -38,10 +37,10 @@ let images = {
 let sounds = {
 
 }
-let gravityMann = .981
+let gravityMann = .781
 let gravityEdmund = .981
 let frictionMann = .8
-let frictionEdmund = .8
+let frictionEdmund = .84
 let secMann = 60
 let secEdmund = 60
 let keys = {}
@@ -164,7 +163,6 @@ class FloorP2 {
       this.height = canvasP2.height
       this.imageP2 = new Image()
       this.imageP2.src = images.edmundPlanet
-      // this.imageP2.onload = this.draw()
       this.imageP22 = new Image()
       this.imageP22.src = images.edmundPlanetFlip
       this.imageP2.onload = this.draw()
@@ -289,15 +287,16 @@ class Farah {
       this.y + this.height > obstacle.y
       )
   }
+
 }
 
 //TOMASA'S MISSING CHECK IF TOUCH W/ BISKETO P2
 class Tomasa {
   constructor () {
     this.x = 180
-    this.y = 223
-    this.width = 100
-    this.height = 110
+    this.y = 250
+    this.width = 50
+    this.height = 70
     this.image = new Image()
     this.image.src = images.tomasaChoose
     this.image.onload = this.draw()
@@ -343,6 +342,9 @@ class Tomasa {
   function update () {
     ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
     ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+    if(didGameEnd()) {
+      return gameOver()
+    }
     frames++
     planet1.draw()
     floorP1.draw()
@@ -361,26 +363,118 @@ class Tomasa {
     generateBisketoP2()
     drawBisketosP1()
     drawBisketosP2()
-    // bisketoCollitionP1()
-    // bisketoCollitionP2()
     if (frames % Math.floor(Math.random() * 10) === 0) {
       generateSnowball()
     }
     drawSnowball()
     snowballCollitionP1()
-    // enemy.draw()
   }
 
-  function gameOverP1 () {
-    if (drawTimeP1.timeP1 === 0) {
-      // youWinP2() CREATE A FUNCTION FOR THE WINNER
-      // ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
-      // clearInterval(interval);
+  function didGameEnd () {
+    if (player1.hp <= 0 && player2.hp <= 0) return true
+    if (player1.hp <= 0 && player2.hp > 0) return true
+    if (player2.hp <= 0 && player2.hp > 0) return true
+    if (drawTimeP1() <= 0 || drawTimeP2() <= 0) return true
+  }
+
+  function gameOver () {
+    clearInterval(interval)
+    if (player1.hp <= 0 && player2.hp <= 0) {
+      ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+      ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+      clearInterval(interval)
+      youLoseP1()
+      youLoseP2()
+    }
+
+    if (player1.hp <= 0 && player2.hp > 0) {
+      ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+      ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+      clearInterval(interval)
+      youWinP2() 
+      youLoseP1()
+    }
+
+    if (player2.hp <= 0 && player2.hp > 0) {
+      ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+      ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+      clearInterval(interval)
+      youWinP1()
+      youLoseP2()
+    }
+
+    if (drawTimeP1() <= 0 || drawTimeP2() <= 0) {
+      if (bisketoP1Counter < bisketoP2Counter) {
+        ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+        ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+        clearInterval(interval)
+        youLoseP1()
+        youWinP2()
+      }
+
+      if (bisketoP2Counter < bisketoP1Counter) {
+        ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
+        ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
+        clearInterval(interval)
+        youWinP1()
+        youLoseP2()
+      }
     }
   }
 
 
 // AUX FUNCTIONS
+
+function youWinP1() {
+  ctxP1.clearRect(0,0,canvasP1.width, canvasP1.height)
+  clearInterval(interval)
+  interval = undefined
+  let winP1 = new Image()
+  winP1.src = "../images/Gargantua.gif"
+  ctxP1.drawImage(winP1, 0, 0, canvasP1.width, canvasP1.height)
+  ctxP1.font = "30px 'Major Mono Display'"
+  ctxP1.fillStyle = "#fff"
+  ctxP1.textAlign = "center"
+  ctxP1.fillText("You Win",300,300)
+}
+
+function youLoseP1() {
+  ctxP1.clearRect(0,0,canvasP1.width, canvasP1.height)
+  clearInterval(interval)
+  interval = undefined
+  let winP1 = new Image()
+  winP1.src = "../images/Gargantua.gif"
+  ctxP1.drawImage(winP1, 0, 0, canvasP1.width, canvasP1.height)
+  ctxP1.font = "30px 'Major Mono Display'"
+  ctxP1.fillStyle = "#fff"
+  ctxP1.textAlign = "center"
+  ctxP1.fillText("You Lose",300,300)
+}
+
+function youWinP2() {
+  ctxP2.clearRect(0,0,canvasP2.width, canvasP2.height)
+  clearInterval(interval)
+  let winP2 = new Image()
+  winP2.src = "../images/Gargantua.gif"
+  ctxP2.drawImage(winP2, 0, 0, canvasP2.width, canvasP2.height)
+  ctxP2.font = "30px 'Major Mono Display'"
+  ctxP2.fillStyle = "#fff"
+  ctxP2.textAlign = "center"
+  ctxP2.fillText("You Win",300,300)
+}
+
+function youLoseP2() {
+  ctxP2.clearRect(0,0,canvasP2.width, canvasP2.height)
+  clearInterval(interval)
+  interval = undefined
+  let winP2 = new Image()
+  winP2.src = "../images/Gargantua.gif"
+  ctxP2.drawImage(winP1, 0, 0, canvasP2.width, canvasP2.height)
+  ctxP2.font = "30px 'Major Mono Display'"
+  ctxP2.fillStyle = "#fff"
+  ctxP2.textAlign = "center"
+  ctxP2.fillText("You Lose",300,300)
+}
 
 function clearCanvas () {
   ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
@@ -388,22 +482,19 @@ function clearCanvas () {
 }
 
 function intro_screen() {
-  ctxP1.font = "40px 'Major Mono Display'"
+  let bgIntro = new Image()
+  bgIntro.src = "../images/Gargantua.gif"
+  ctxP1.drawImage(bgIntro, 0, 0, canvasP1.width, canvasP1.height)
+  ctxP2.drawImage(bgIntro, 0, 0, canvasP2.width, canvasP2.height)
+  ctxP1.font = "30px 'Major Mono Display'"
   ctxP1.fillStyle = "#fff"
   ctxP1.textAlign = "center"
-  ctxP1.fillText("Press S to start",200,200)
-  // ctxP2.fillText("Press &#9660 to start",200,200)
+  ctxP1.fillText("press G to start",300,300)
+  ctxP2.font = "30px 'Major Mono Display'"
+  ctxP2.fillStyle = "#fff"
+  ctxP2.textAlign = "center"
+  ctxP2.fillText("press G to start",300,300)
 }
-
-// function drawCoverMultiplayer () {
-//   ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
-//   ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
-//   ctxP1.drawImage("../images/Gargantua.gif", 0, 0, canvasP1.width, canvasP1.height)
-//   ctxP2.drawImage("../images/Gargantua.gif", 0, 0, canvasP2.width, canvasP2.height)
-//   ctxP1.font = "40px 'Major Mono Display'"
-//   ctxP1.fillText("Press S to start",200,200)
-//   ctxP2.fillText("Press &#9660 to start",200,200)
-// }
 
 function generateBisketoP1 () {
   if (frames % 100 !== 0) return
@@ -418,8 +509,6 @@ function generateBisketoP2 () {
 }
 
 function generateSnowball () {
-  // let alienTime = [100,400,300,200]
-  // let randomAlien = Math.floor(Math.random()*alienTime[Math.floor(Math.random()*i.length)])
   if (frames % 100 !== 0) return
   let oneSnowball = new Snowball()
   enemiesP1.push(oneSnowball)
@@ -481,16 +570,18 @@ function snowballCollitionP1 () {
 }
 
 
-function drawTimeP1(){
-  let timeP1 = 180 - Math.floor(frames/secMann)
+function drawTimeP1() {
+  let timeP1 = 60 - Math.floor(frames/secMann)
   let timePrintP1 = "T-" + timeP1 + " sec"
   document.getElementById('timeP1').textContent = timePrintP1
+  return timeP1
 }
 
 function drawTimeP2(){
-  let timeP2 = 180 - Math.floor(frames/secEdmund)
+  let timeP2 = 60 - Math.floor(frames/secEdmund)
   let timePrintP2 = "T-" + timeP2 + " sec"
   document.getElementById('timeP2').textContent = timePrintP2
+  return timeP2
 }
 
 function moveP1() {
@@ -539,6 +630,7 @@ function moveP2 () {
   }
   player2.x += player2.velX
   player2.velX *= frictionEdmund
+
   //horizontal
 
   if(keys[39]){
@@ -567,7 +659,6 @@ let floorP1 = new FloorP1()
 let floorP2 = new FloorP2()
 let player1 = new Farah()
 let player2 = new Tomasa()
-// let gameCover = new Cover()  
 
 
 // LISTENERS
@@ -600,6 +691,7 @@ addEventListener('keydown', e => {
     document.getElementById('keys-left').classList.add('on')
     document.getElementById('keys-right').classList.remove('off')
     document.getElementById('keys-right').classList.add('on')
+    intro_screen()
   }
 
   //DOM 2
