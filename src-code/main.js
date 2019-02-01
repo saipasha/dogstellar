@@ -146,8 +146,7 @@ class FloorP2 {
 
     drawScore () {
       this.bisketoP1 = new Image()
-      this.bisketoP1.src = images.bisketo
-      this.image.onload = this.draw.bind(this)  
+      this.bisketoP1.src = images.bisketo 
       ctxP1.drawImage(this.bisketoP1, 500, 20, 30, 30)
       ctxP1.font = "20px 'Major Mono Display'"
       ctxP1.fillStyle = "khaki"  
@@ -189,12 +188,11 @@ class FloorP2 {
 
     drawScore () {
       this.bisketoP2 = new Image()
-      this.bisketoP2.src = images.bisketo
-      this.image.onload = this.draw.bind(this)  
-      ctxP1.drawImage(this.bisketoP2, 500, 20, 30, 30)
-      ctxP1.font = "20px 'Major Mono Display'"
-      ctxP1.fillStyle = "khaki"  
-      ctxP1.fillText(bisketoP2Counter, 540, 42)
+      this.bisketoP2.src = images.bisketo 
+      ctxP2.drawImage(this.bisketoP2, 500, 20, 30, 30)
+      ctxP2.font = "20px 'Major Mono Display'"
+      ctxP2.fillStyle = "khaki"  
+      ctxP2.fillText(bisketoP2Counter, 540, 42)
     }
   }
 
@@ -210,14 +208,14 @@ class BisketoP1 {
   }
 
   draw () {
-    this.y += 3
+    this.y += 5
     ctxP1.drawImage(this.imageBisketo, this.x, this.y, this.width, this.height)
   }
 }
 
 class BisketoP2 {
   constructor () {
-    this.x = Math.floor(Math.random() * canvasP2.width-100)
+    this.x = Math.floor(Math.random() * canvasP2.width)
     this.y = -40
     this.width = 40
     this.height = 40
@@ -245,8 +243,7 @@ class Snowball {
   draw () {
     this.x += 3
     ctxP1.drawImage(this.imageSnowball, this.x, this.y, this.width, this.height)
-    // if (frames % 50 === 0) this.sx = 0
-    // else if (frames % 100 === 0)this.sx = 1069
+    ctxP2.drawImage(this.imageSnowball, this.x, this.y, this.width, this.height)
   }  
 }
 
@@ -304,7 +301,7 @@ class Tomasa {
     this.velY = 0
     this.grounded = true
     this.jumping = false
-    this.jumpStrength = 15
+    this.jumpStrength = 11
     //horizontal
     this.velX = 0
     this.hp = 100
@@ -355,6 +352,7 @@ class Tomasa {
     planet1.drawScore()
     player2.draw()
     player2.drawHP()
+    planet2.drawScore()
     moveP1()
     moveP2()
     drawTimeP1()
@@ -363,17 +361,20 @@ class Tomasa {
     generateBisketoP2()
     drawBisketosP1()
     drawBisketosP2()
-    if (frames % Math.floor(Math.random() * 10) === 0) {
-      generateSnowball()
+    if (frames % Math.floor(Math.random() * 4) === 0) {
+      generateSnowballP1()
+      generateSnowballP2()
     }
-    drawSnowball()
+    drawSnowballP1()
     snowballCollitionP1()
+    drawSnowballP2()
+    snowballCollitionP2()
   }
 
   function didGameEnd () {
     if (player1.hp <= 0 && player2.hp <= 0) return true
-    if (player1.hp <= 0 && player2.hp > 0) return true
-    if (player2.hp <= 0 && player2.hp > 0) return true
+    if (player1.hp <= 0) return true
+    if (player2.hp <= 0) return true
     if (drawTimeP1() <= 0 || drawTimeP2() <= 0) return true
   }
 
@@ -387,7 +388,7 @@ class Tomasa {
       youLoseP2()
     }
 
-    if (player1.hp <= 0 && player2.hp > 0) {
+    if (player1.hp <= 0) {
       ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
       ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
       clearInterval(interval)
@@ -395,7 +396,7 @@ class Tomasa {
       youLoseP1()
     }
 
-    if (player2.hp <= 0 && player2.hp > 0) {
+    if (player2.hp <= 0) {
       ctxP1.clearRect(0, 0, canvasP1.width, canvasP1.height)
       ctxP2.clearRect(0, 0, canvasP2.width, canvasP2.height)
       clearInterval(interval)
@@ -428,27 +429,25 @@ class Tomasa {
 function youWinP1() {
   ctxP1.clearRect(0,0,canvasP1.width, canvasP1.height)
   clearInterval(interval)
-  interval = undefined
   let winP1 = new Image()
   winP1.src = "../images/Gargantua.gif"
   ctxP1.drawImage(winP1, 0, 0, canvasP1.width, canvasP1.height)
   ctxP1.font = "30px 'Major Mono Display'"
   ctxP1.fillStyle = "#fff"
   ctxP1.textAlign = "center"
-  ctxP1.fillText("You Win",300,300)
+  ctxP1.fillText("you win",300,300)
 }
 
 function youLoseP1() {
   ctxP1.clearRect(0,0,canvasP1.width, canvasP1.height)
   clearInterval(interval)
-  interval = undefined
   let winP1 = new Image()
   winP1.src = "../images/Gargantua.gif"
   ctxP1.drawImage(winP1, 0, 0, canvasP1.width, canvasP1.height)
   ctxP1.font = "30px 'Major Mono Display'"
   ctxP1.fillStyle = "#fff"
   ctxP1.textAlign = "center"
-  ctxP1.fillText("You Lose",300,300)
+  ctxP1.fillText("you lose",300,300)
 }
 
 function youWinP2() {
@@ -460,20 +459,19 @@ function youWinP2() {
   ctxP2.font = "30px 'Major Mono Display'"
   ctxP2.fillStyle = "#fff"
   ctxP2.textAlign = "center"
-  ctxP2.fillText("You Win",300,300)
+  ctxP2.fillText("you win",300,300)
 }
 
 function youLoseP2() {
   ctxP2.clearRect(0,0,canvasP2.width, canvasP2.height)
   clearInterval(interval)
-  interval = undefined
   let winP2 = new Image()
   winP2.src = "../images/Gargantua.gif"
-  ctxP2.drawImage(winP1, 0, 0, canvasP2.width, canvasP2.height)
+  ctxP2.drawImage(winP2, 0, 0, canvasP2.width, canvasP2.height)
   ctxP2.font = "30px 'Major Mono Display'"
   ctxP2.fillStyle = "#fff"
   ctxP2.textAlign = "center"
-  ctxP2.fillText("You Lose",300,300)
+  ctxP2.fillText("you lose",300,300)
 }
 
 function clearCanvas () {
@@ -508,11 +506,18 @@ function generateBisketoP2 () {
   bisketosP2.push(bisketoP2)
 }
 
-function generateSnowball () {
-  if (frames % 100 !== 0) return
+function generateSnowballP1 () {
+  if (frames % 70 !== 0) return
   let oneSnowball = new Snowball()
   enemiesP1.push(oneSnowball)
   
+}
+
+function generateSnowballP2 () {
+  if (frames % 70 !== 0) return
+  let oneSnowballP2 = new Snowball()
+  enemiesP2.push(oneSnowballP2)
+  console.log("lol")
 }
 
 function drawBisketosP1 () {
@@ -533,12 +538,21 @@ function drawBisketosP2 () {
   })
 }
 
-function drawSnowball () {
+function drawSnowballP1 () {
   enemiesP1.forEach((oneSnowball, index) => {
     if (oneSnowball.x > 700) {
       enemiesP1.splice(index,1)
     }
     oneSnowball.draw()
+  })
+}
+
+function drawSnowballP2 () {
+  enemiesP2.forEach((oneSnowballP2, index) => {
+    if (oneSnowballP2.x > 700) {
+      enemiesP2.splice(index,1)
+    }
+    oneSnowballP2.draw()
   })
 }
 
@@ -553,7 +567,7 @@ function bisketoCollitionP1() {
 
 function bisketoCollitionP2() {
   bisketosP2.forEach((bisketoP2, index) => {
-    if (player1.checkIfTouch(bisketoP2)) {
+    if (player2.checkIfTouch(bisketoP2)) {
       bisketoP2Counter++
       bisketosP2.splice(index, 1)
     }
@@ -569,6 +583,14 @@ function snowballCollitionP1 () {
   })
 }
 
+function snowballCollitionP2 () {
+  enemiesP2.forEach((oneSnowballP2, index) => {
+    if (player2.checkIfTouch(oneSnowballP2)) {
+      enemiesP2.splice(index, 1)
+      player2.hp -= 20
+    }
+  })
+}
 
 function drawTimeP1() {
   let timeP1 = 60 - Math.floor(frames/secMann)
@@ -596,6 +618,9 @@ function moveP1() {
   }
   player1.x += player1.velX
   player1.velX *= frictionMann
+
+  // Horizontal
+
   if (keys[68]) {
     if (player1.x >= canvasP1.width - 40) {
       player1.velX--
@@ -623,10 +648,10 @@ function moveP2 () {
     player2.y += player2.velY
     player2.velY += gravityEdmund
   }
-  if(player2.y > 300 ){
+  if(player2.y > floorP2.y - player2.height ){
     player2.grounded = true
     player2.jumping = false
-    player2.y = floorP2.y - player2.height + 20
+    player2.y = floorP2.y - player2.height
   }
   player2.x += player2.velX
   player2.velX *= frictionEdmund
@@ -634,17 +659,23 @@ function moveP2 () {
   //horizontal
 
   if(keys[39]){
-    player2.velX++
+    if (player2.x >= canvasP2.width - 40) {
+      player2.velX--
+    }
+    else player2.velX++
   }
   if(keys[37]){
-    player2.velX--
+    if (player2.x < 40) {
+      player2.velX++
+    }
+    else player2.velX--
   }
   if(keys[38]){
     if(!player2.jumping){
       player2.velY = 0
       player2.grounded = false
       player2.jumping = true
-      player2.velY += -player2.jumpStrength
+      player2.velY += -player2.jumpStrength * 2
       
     } 
   }

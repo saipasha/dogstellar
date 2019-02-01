@@ -116,19 +116,25 @@ p {
   color: white;
   font-family: Avenir;
   font-size: 15px;
-  margin: 5px auto auto 100px;
+  margin: 5px auto 10px 100px;
 }
 
 #game-instructions {
   width: 1200px;
   display: flex;
-  justify-content: space-around;
-  align-content: center;
-  height: 80px;
+  justify-content: center;
+  width: 1100px;
   flex-wrap: wrap;
   color: whitesmoke;
   font-family: Avenir;
-  margin: auto 50px auto 50px;
+  margin: auto;
+}
+
+#title {
+  font-weight: 700;
+  font-size: 30px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 /* #game-instructions img {
@@ -137,7 +143,7 @@ p {
 } */
 
 #storyline p {
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 400;
 }
 
